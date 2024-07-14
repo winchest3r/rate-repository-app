@@ -1,15 +1,95 @@
-import { Text, View } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
+
+import Text from './Text';
+
+import theme from '../theme';
+
+const styles = StyleSheet.create({
+  flexItem: {
+    flexGrow: 1,
+    backgroundColor: theme.backgroundColors.repositoryPrimary,
+    marginBottom: 10,
+    padding: 10,
+    gap: 10,
+  },
+  upperBox: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
+  },
+  image: {
+    borderColor: theme.backgroundColors.repositoryPrimary,
+    overflow: 'hidden',
+    flexGrow: 0,
+  },
+  upperItem: {
+    flexShrink: 1,
+    gap: 5,
+  },
+  language: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+    borderRadius: 5,
+    padding: 2,
+    color: 'white',
+  },
+  lowerBox: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingLeft: 20,
+    paddingRight: 20,
+    justifyContent: 'space-between',
+  },
+  repoStatItem: {
+    display: 'flex',
+    gap: 5,
+  },
+});
+
+const RepoStatItem = ({ text, value }) => {
+  const simplifyNumber = (number) => {
+    if (number < 1000) {
+      return number;
+    }
+    const div = Math.floor(number / 1000);
+    const rem = Math.round(number % 1000 / 100);
+
+    return div + (rem ? '.' + rem : '') + 'k';
+  }
+
+  return (
+    <View style={styles.repoStatItem}>
+      <Text style={{textAlign: 'center'}} fontWeight='bold'>{simplifyNumber(value)}</Text>
+      <Text style={{textAlign: 'center'}} color='textSecondary'>{text}</Text>
+    </View>
+  );
+};
 
 const RepositoryItem = ({ repo }) => {
   return (
-    <View>
-      <Text>Full name: {repo.fullName}</Text>
-      <Text>Description: {repo.description}</Text>
-      <Text>Language: {repo.language}</Text>
-      <Text>Forks: {repo.forksCount}</Text>
-      <Text>Stars: {repo.stargazersCount}</Text>
-      <Text>Rating: {repo.ratingAverage}</Text>
-      <Text>Reviews: {repo.reviewCount}</Text>
+    <View style={styles.flexItem}>
+      <View style={styles.upperBox}>
+        <View style={styles.upperItem}>
+          <Text fontSize='subheading' fontWeight='bold'>{repo.fullName}</Text>
+          <Text color='textSecondary'>{repo.description}</Text>
+          <View style={{display: 'flex', flexDirection: 'row'}}>
+            <Text style={styles.language}>{repo.language}</Text>
+          </View>
+        </View>
+        <View style={{flexGrow: 1}}></View>
+        <View style={styles.image}>
+          <Image
+            source={{uri: repo.ownerAvatarUrl}}
+            style={{width: 70, height: 70, borderRadius: 10 }}
+          />
+        </View>
+      </View>
+      <View style={styles.lowerBox}>
+        <RepoStatItem text='Forks' value={repo.forksCount} />
+        <RepoStatItem text='Stars' value={repo.stargazersCount} />
+        <RepoStatItem text='Rating' value={repo.ratingAverage} />
+        <RepoStatItem text='Reviews' value={repo.reviewCount} />
+      </View>
     </View>
   );
 };
