@@ -7,7 +7,7 @@ import theme from '../theme';
 const styles = StyleSheet.create({
   flexItem: {
     flexGrow: 1,
-    backgroundColor: theme.backgroundColors.repositoryPrimary,
+    backgroundColor: theme.backgroundColors.primary,
     marginBottom: 10,
     padding: 10,
     gap: 10,
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   image: {
-    borderColor: theme.backgroundColors.repositoryPrimary,
+    borderColor: theme.backgroundColors.primary,
     overflow: 'hidden',
     flexGrow: 0,
   },
