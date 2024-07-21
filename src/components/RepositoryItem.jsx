@@ -3,6 +3,7 @@ import { View, StyleSheet, Image } from 'react-native';
 import Text from './Text';
 
 import theme from '../theme';
+import { simplifyNumber } from '../utils/helpers';
 
 const styles = StyleSheet.create({
   flexItem: {
@@ -47,16 +48,6 @@ const styles = StyleSheet.create({
 });
 
 const RepoStatItem = ({ text, value }) => {
-  const simplifyNumber = (number) => {
-    if (number < 1000) {
-      return number;
-    }
-    const div = Math.floor(number / 1000);
-    const rem = Math.round(number % 1000 / 100);
-
-    return div + (rem ? '.' + rem : '') + 'k';
-  }
-
   return (
     <View style={styles.repoStatItem}>
       <Text style={{textAlign: 'center'}} fontWeight='bold'>{simplifyNumber(value)}</Text>
@@ -67,7 +58,7 @@ const RepoStatItem = ({ text, value }) => {
 
 const RepositoryItem = ({ repo }) => {
   return (
-    <View style={styles.flexItem}>
+    <View style={styles.flexItem} testID="repositoryItem">
       <View style={styles.upperBox}>
         <View style={styles.upperItem}>
           <Text fontSize='subheading' fontWeight='bold'>{repo.fullName}</Text>
