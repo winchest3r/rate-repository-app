@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
-  const { data, loading } = useQuery(GET_ME);
+  const { data } = useQuery(GET_ME);
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
 
@@ -30,11 +30,18 @@ const AppBar = () => {
     <View style={styles.container}>
       <ScrollView pagingEnabled horizontal>
         <AppBarTab text="Repositories" link="/" />
-        {!loading && data.me
-          ? <AppBarTab text="Sign Out" onPress={logout} link="/signIn" /> 
+        {data.me
+          ? <AppBarTab text="Sign Out" onPress={logout} link="/signIn" />
           : <AppBarTab text="Sign In" link="/signIn" />
         }
-        
+        {data.me
+          ? <AppBarTab text="Create a review" link="/createReview" />
+          : null
+        }
+        {!data.me
+          ? <AppBarTab text="Sign up" link="/signUp" />
+          : null
+        }
       </ScrollView>
     </View>
   );
