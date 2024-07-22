@@ -12,5 +12,6 @@ export const REPO_DETAILS = gql`
     ratingAverage
     reviewCount
     url
+    createdAt
   }
 `;

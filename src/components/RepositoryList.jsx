@@ -1,11 +1,38 @@
+import { useState } from 'react';
+import { View } from 'react-native';
+import { useDebounce } from 'use-debounce';
+
 import useRepositories from '../hooks/useRepositories';
 
 import RepositoryListContainer from './RepositoryListContainer';
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
+  const [selectedOrder, setSelectedOrder] = useState('latest');
+  const [filterQuery, setFilterQuery] = useState('');
+  const [filterValue] = useDebounce(filterQuery, 500);
+
+  let { repositories } = useRepositories(selectedOrder);
   
-  return <RepositoryListContainer repositories={repositories} />;
+  if (filterValue) {
+      repositories = {
+        edges: repositories.edges.filter(
+          repo => repo.node.fullName.toLowerCase().match(filterValue.toLowerCase())
+      )
+    };
+  }
+
+  return (
+    <View>
+      
+      <RepositoryListContainer
+        repositories={repositories}
+        selectedOrder={selectedOrder}
+        setSelectedOrder={setSelectedOrder}
+        filterQuery={filterQuery}
+        setFilterQuery={setFilterQuery}
+      />
+    </View>
+  );
 };
 
 export default RepositoryList;

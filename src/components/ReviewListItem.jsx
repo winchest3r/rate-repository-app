@@ -13,15 +13,16 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   textDescription: {
-    width: 320,
+    width: 300,
   },
   rating: {
-    flexShrink: 1,
+    flexBasis: 60,
     witdh: 50,
-    height: 50,
+    height: 60,
   },
   ratingText: {
     color: theme.colors.primary,
+    textAlign: 'center',
     fontSize: 20,
     borderStyle: 'solid',
     borderRadius: 25,
