@@ -11,8 +11,12 @@ const RepositoryList = () => {
   const [filterQuery, setFilterQuery] = useState('');
   const [filterValue] = useDebounce(filterQuery, 500);
 
-  let { repositories } = useRepositories(selectedOrder);
+  let { repositories, fetchMore } = useRepositories(selectedOrder);
   
+  const onEndReach = () => {
+    fetchMore();
+  };
+
   if (filterValue) {
       repositories = {
         edges: repositories.edges.filter(
@@ -23,13 +27,13 @@ const RepositoryList = () => {
 
   return (
     <View>
-      
       <RepositoryListContainer
         repositories={repositories}
         selectedOrder={selectedOrder}
         setSelectedOrder={setSelectedOrder}
         filterQuery={filterQuery}
         setFilterQuery={setFilterQuery}
+        onEndReach={onEndReach}
       />
     </View>
   );

@@ -12,12 +12,29 @@ import { GET_REPOSITORY } from '../graphql/queries';
 const RepositoryLinkView = () => {
   const { id } = useParams();
 
-  const { data, loading } = useQuery(GET_REPOSITORY, {
+  const { data, loading, fetchMore } = useQuery(GET_REPOSITORY, {
     variables: {
-      id
+      id,
+      first: 8,
     },
     fetchPolicy: 'cache-and-network',
   });
+
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repository.reviews.pageInfo.hasNextPage;
+    
+    if (!canFetchMore) {
+      return;
+    }
+    
+    fetchMore({
+      variables: {
+        after: data.repository.reviews.pageInfo.endCursor,
+        id,
+        first: 8,
+      },
+    });
+  };
 
   if (loading) {
     return (
@@ -35,6 +52,8 @@ const RepositoryLinkView = () => {
       renderItem={({ item }) => <ReviewListItem review={item} />}
       keyExtractor={({ id }) => id}
       ListHeaderComponent={() => <RepositoryInfo repo={data.repository} />}
+      onEndReached={() => handleFetchMore()}
+      onEndReachedThreshold={0.5}
     />
   );
 };

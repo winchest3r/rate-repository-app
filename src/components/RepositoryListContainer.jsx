@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RepositoryListContainer = ({ repositories, selectedOrder, setSelectedOrder, filterQuery, setFilterQuery }) => {
+const RepositoryListContainer = ({ repositories, selectedOrder, setSelectedOrder, filterQuery, setFilterQuery, onEndReach }) => {
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
     : [];
@@ -43,6 +43,8 @@ const RepositoryListContainer = ({ repositories, selectedOrder, setSelectedOrder
         styles={styles.flexContainer}
         data={repositoryNodes}
         renderItem={renderRepoItem}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
       />
     );
 };

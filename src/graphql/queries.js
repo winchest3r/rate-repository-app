@@ -3,12 +3,24 @@ import { gql } from '@apollo/client';
 import { REPO_DETAILS } from './fragments';
 
 export const GET_REPOSITORIES = gql`
-  query GetRepositories($orderDirection: OrderDirection, $orderBy: AllRepositoriesOrderBy) {
-    repositories(orderDirection: $orderDirection, orderBy: $orderBy) {
+  query GetRepositories(
+    $orderDirection: OrderDirection,
+    $orderBy: AllRepositoriesOrderBy,
+    $first: Int,
+    $after: String
+    ) {
+    repositories(orderDirection: $orderDirection, orderBy: $orderBy, first: $first, after: $after) {
+      totalCount
       edges {
         node {
           ...RepoDetails
         }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
       }
     }
   }
@@ -20,15 +32,30 @@ export const GET_ME = gql`
     me {
       id
       username
+      reviews {
+        edges {
+          node {
+            id
+            repository {
+              fullName
+              id
+            }
+            createdAt
+            rating
+            text
+          }
+        }
+      }
     }
   }
 `;
 
 export const GET_REPOSITORY = gql`
-  query getRepository($id: ID!) {
+  query getRepository($id: ID!, $first: Int) {
     repository(id: $id) {
       ...RepoDetails
-      reviews {
+      reviews(first: $first) {
+        totalCount
         edges {
           node {
             id
@@ -40,6 +67,12 @@ export const GET_REPOSITORY = gql`
               username
             }
           }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
         }
       }
     }
